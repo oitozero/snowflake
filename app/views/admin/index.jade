@@ -1,0 +1,39 @@
+
+//- # admin - index
+
+extends ../layout
+
+block content
+  .container
+    .row
+      h1
+        | #{product} - Admin
+    .row
+      h2
+        | #{pageviews}
+        small
+          | &nbsp;page view/s
+        | &nbsp;/
+        | #{subscribers.length}
+        small
+          | subscriber/s
+        span(class='pull-right')
+          | #{bouncerate}%
+          small
+            | &nbsp;bounce rate
+    hr
+    .row
+      table(class='table table-striped')
+        thead
+          tr
+            th Email
+            th Created At
+            th Confirmed At
+            th TTL
+        tbody
+          each subscriber in subscribers
+            tr
+              td= subscriber.email
+              td= subscriber.createdAt ? moment(subscriber.createdAt).format("YYYY/MM/DD HH:mm:ss") : '(none set)'
+              td= subscriber.confirmedAt ? moment(subscriber.confirmedAt).format("YYYY/MM/DD HH:mm:ss") : '(none set)'
+              td= subscriber.createdAt && subscriber.confirmedAt ? moment(subscriber.confirmedAt).diff(moment(subscriber.createdAt), 'minutes') + ' ' + 'minutes' : '(none set)'

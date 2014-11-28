@@ -1,0 +1,41 @@
+
+//- # layout
+
+doctype
+html.no-js
+  head
+    title= typeof title === 'string' ? title : ''
+    block meta
+      meta(charset='utf-8')
+      meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+      meta(name='description', content=description)
+      meta(name='viewport', content='width=device-width, initial-scale=1')
+    block stylesheets
+      <!-- build:css /css/app.css -->
+      link(rel='stylesheet', href='/css/style.css')
+      link(rel='stylesheet', href='/bower/sweetalert/lib/sweet-alert.css')
+      <!-- endbuild -->
+    <!-- build:js /js/modernizr.js -->
+    script(src='/bower/modernizr/modernizr.js')
+    <!-- endbuild -->
+  body
+    //- Browse Happy
+    //- <http://browsehappy.com/>
+    != "<!--[if lt IE 8]>"
+    p.browsehappy
+      = 'You are using an '
+      strong outdated
+      = ' browser. Please '
+      a(href="http://browsehappy.com/") upgrade your browser
+      = ' to improve your experience.'
+    != "<!--<![endif]-->"
+    block messages
+      include _messages.jade
+    block content
+    block scripts
+      <!-- build:js /js/app.js -->
+      script(src='/bower/jquery/dist/jquery.js')
+      script(src='/bower/sweetalert/lib/sweet-alert.js')
+      script(src='/js/plugins.js')
+      script(src='/js/main.js')
+      <!-- endbuild -->
