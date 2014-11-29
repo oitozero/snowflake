@@ -60,8 +60,8 @@ Debugging:
 DEBUG=* node app
 ```
 
-###### Open http://localhost:300
-###### Open http://localhost:300/admin (default auth: username/password)
+###### Open http://localhost:3000
+###### Open http://localhost:3000/admin (default auth: username/password)
 Note: set basicAuth.username and basicAuth.password in config.js
 
 #### Gulp tasks:
