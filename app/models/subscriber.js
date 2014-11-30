@@ -7,6 +7,7 @@ var _ = require('underscore');
 var _str = require('underscore.string');
 _.mixin(_str.exports());
 var crypto = require('crypto');
+var MailChimpAPI = require('mailchimp').MailChimpAPI;
 
 exports = module.exports = function(settings, mongoose, email, logger) {
 
@@ -48,32 +49,47 @@ exports = module.exports = function(settings, mongoose, email, logger) {
 
   // methods
   Subscriber.methods.sendConfirmationEmail = function sendConfirmationEmail(callback) {
-
     var subscriber = this;
 
-    var md5 = crypto.createHash( 'md5' );
-    md5.update( subscriber.id + subscriber.email, 'utf8' );
-    var hash = md5.digest( 'hex' );
-
-    var link = settings.url + '/confirm?s=' + subscriber.id + '&' + 't=' + hash;
-
-    email('confirmation', {
-      link: link,
-      email: settings.application.email
-    }, {
-      to: subscriber.email,
-      from: settings.application.email,
-      subject: util.format('%s: Please Confirm Subscription', settings.application.product)
-    }, function(err, responseStatus) {
-      if (_.isFunction(callback)) {
-        return callback(err, responseStatus);
+    if(settings.mailchimp.enabled) {
+      try { 
+        var api = new MailChimpAPI(settings.mailchimp.apiKey, { version : '2.0', secure : false });
+      } catch (error) {
+        logger.error(error.message);
       }
-      if (err) {
-        return logger.error(err);
-      }
-      logger.info('sent confirmation email to %s', subscriber.email);
-    });
 
+      // submit subscription request to mail chimp
+      api.lists_subscribe({id: settings.mailchimp.listId, email: {email: subscriber.email}}, function(data) {
+        logger.info('sent confirmation email to %s', subscriber.email);
+      }, function(error) {
+        logger.error(error);
+      }); 
+
+    } else {
+
+      var md5 = crypto.createHash( 'md5' );
+      md5.update( subscriber.id + subscriber.email, 'utf8' );
+      var hash = md5.digest( 'hex' );
+
+      var link = settings.url + '/confirm?s=' + subscriber.id + '&' + 't=' + hash;
+
+      email('confirmation', {
+        link: link,
+        email: settings.application.email
+      }, {
+        to: subscriber.email,
+        from: settings.application.email,
+        subject: util.format('%s: Please Confirm Subscription', settings.application.product)
+      }, function(err, responseStatus) {
+        if (_.isFunction(callback)) {
+          return callback(err, responseStatus);
+        }
+        if (err) {
+          return logger.error(err);
+        }
+        logger.info('sent confirmation email to %s', subscriber.email);
+      });
+    }
   };
 
   return mongoose.model('Subscriber', Subscriber);

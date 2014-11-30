@@ -37,6 +37,12 @@ exports = module.exports = function() {
         profile_id: 'ga:<profile_id>',
         tracking_id: 'UA-XXXXXXXX-Y'
       },
+      // eanble/configure to use mailchimp lists
+      mailchimp: {
+        enabled: false,
+        apiKey: '<mailchimp:account:extras:API keys>',
+        listId: '<create list:settings:unique id for list>',
+      },
       basicAuth: {
         enabled: true,
         name: 'username',

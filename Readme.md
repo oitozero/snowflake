@@ -11,10 +11,10 @@
 - Collect email addresses.
 - Admin (list subscribers).
 - Google Analytics (track page views).
+- Integration with MailChimp list/s.
 
 ## TODO
 - Unsubscribe
-- MailChimp campaing/s
 - A/B Testing
 - Support for social networks
 - Improve Stats
