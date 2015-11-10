@@ -52,8 +52,9 @@ exports = module.exports = function(settings, mongoose, email, logger) {
     var subscriber = this;
 
     if(settings.mailchimp.enabled) {
+      var api;
       try { 
-        var api = new MailChimpAPI(settings.mailchimp.apiKey, { version : '2.0', secure : false });
+        api = new MailChimpAPI(settings.mailchimp.apiKey, { version : '2.0', secure : false });
       } catch (error) {
         logger.error(error.message);
       }
